@@ -7,7 +7,17 @@ export default class HomePage extends React.Component {
     }
 
     handleUpload = (event) => {
-        console.log(event.target.files[0]);
+        var file = event.target.files[0];
+        const ws = new WebSocket("ws://localhost:40510")
+
+        ws.onopen = () => {
+            console.log("websocket")
+            ws.send(file)
+        }
+
+        //ws.onmessage = (ev) => {
+            //console.log(ev);
+        //}
     }
 
     render() {
