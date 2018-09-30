@@ -5,9 +5,7 @@ const regionFile = './data/nanp.xlsx'
 
 wss.on('connection', (ws) => {
     ws.on('message', (file) => {
-        //console.log(file)
         console.log(getColumn(file,2))
-        //console.log(fileData[0].data[0])
     })
 })
 
@@ -17,7 +15,10 @@ getColumn = (file,column) => {
     var phoneNumbers = []
     fileData[0].data.map((val,index) => {
         if(index != 0) {
-            phoneNumbers.push(val[0])
+            var firstFour = parseInt((val[0]+"").slice(0,4))
+            if(!phoneNumbers.includes(firstFour)) {
+                phoneNumbers.push(firstFour)
+            }
         }
     })
     return phoneNumbers;
