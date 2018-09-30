@@ -25,7 +25,7 @@ export default class HomePage extends React.Component {
         return(
             <center>
                 <h1>Welcome to Absentia</h1>
-                    <input type='file' onChange={this.handleUpload.bind(this)}/> 
+                    <input type='file' onChange={this.handleUpload.bind(this)} accept=".xls,.xlsx"/> 
             </center>
         );
     }
