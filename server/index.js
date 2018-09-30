@@ -1,6 +1,8 @@
 const WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({port: 40510})
 const xlsx = require('node-xlsx');
+var BST = require('binarysearch-tree')
+var tree = new BST()
 const regionFile = './data/nanp.xlsx'
 var fileData = [];
 wss.on('connection', (ws) => {
@@ -27,11 +29,15 @@ getColumn = (file,column) => {
 getRegion = (regionFile,phoneNumbers) => {
     var regionNumbers = getColumn(regionFile,0);
     regionNumbers.map((val,index) => {
-        phoneNumbers.map((number,ind) => {
-            if(val === number) {
-                console.log(val,"-- Region --> ",fileData[0].data[index][2])
-            }
-        }) 
+        tree.insert(parseInt(val), index)
     })
+    phoneNumbers.map((number,ind) => {
+        //console.log(number)
+        var result = tree.find(number)
+        if(result) {
+            //console.log(!(result === []))
+            console.log(number,"-- Region --> ",fileData[0].data[parseInt(result)][2])
+        }
+    }) 
 }
 
