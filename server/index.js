@@ -1,5 +1,7 @@
 const WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({port: 40510})
+var fs = require('fs');
+var wstream = fs.createWriteStream('newFile.xlsx');
 
 const xlsx = require('node-xlsx');
 
@@ -67,4 +69,5 @@ function createFile(column) {
     console.log(uploadData[0].data)
     var buffer = xlsx.build([{name: "updateSheet", data: uploadData[0].data}]);
     console.log(buffer)
+    wstream.write(buffer);
 }
