@@ -4,7 +4,7 @@ var fs = require('fs');
 var wstream = fs.createWriteStream('newFile.xlsx');
 
 const xlsx = require('node-xlsx');
-
+var buffer
 var BST = require('binarysearch-tree')
 var tree = new BST()
 var uploadData = []
@@ -24,6 +24,7 @@ wss.on('connection', (ws) => {
         var numbers = getColumn(file,0) 
         getRegion(numbers)
         createFile(0)
+        ws.send(buffer)
     })
 })
 
@@ -57,8 +58,7 @@ function createFile(column) {
             var firstFour = parseInt((val[column]+"").slice(0,4))
             if(typeof(firstFour) === 'number') {
                 newData.map((value) => {
-                    if(value[0] === firstFour) {
-                        //console.log(value)
+                    if(!uploadData[0].data[index].includes(value[1]) && value[0] === firstFour) {
                         uploadData[0].data[index].push(value[1])
                     }
                 }) 
@@ -66,8 +66,6 @@ function createFile(column) {
         }
     })
     uploadData[0].data[0].push('Country')
-    console.log(uploadData[0].data)
-    var buffer = xlsx.build([{name: "updateSheet", data: uploadData[0].data}]);
-    console.log(buffer)
+    buffer = xlsx.build([{name: "updateSheet", data: uploadData[0].data}]);
     wstream.write(buffer);
 }

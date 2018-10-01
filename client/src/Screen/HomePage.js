@@ -15,9 +15,14 @@ export default class HomePage extends React.Component {
             ws.send(file)
         }
 
-        //ws.onmessage = (ev) => {
-            //console.log(ev);
-        //}
+        ws.onmessage = (ev) => {
+            console.log(ev);
+            var url = window.URL.createObjectURL(ev.data);
+            var tempLink = document.createElement('a');
+            tempLink.href = url;
+            tempLink.setAttribute('download', 'newData.xlsx');
+            tempLink.click();
+            }
     }
 
     render() {
