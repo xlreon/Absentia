@@ -1,8 +1,5 @@
 const WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({port: 40510})
-var fs = require('fs');
-var wstream = fs.createWriteStream('newFile.xlsx');
-
 const xlsx = require('node-xlsx');
 var buffer
 var BST = require('binarysearch-tree')
@@ -59,13 +56,24 @@ function createFile(column) {
             if(typeof(firstFour) === 'number') {
                 newData.map((value) => {
                     if(!uploadData[0].data[index].includes(value[1]) && value[0] === firstFour) {
-                        uploadData[0].data[index].push(value[1])
+                        var insertIndex = uploadData[0].data[0].indexOf('Country') 
+                        if(insertIndex !== -1)
+                        {
+                            console.log(insertIndex)
+                            uploadData[0].data[index][insertIndex] = value[1]
+                        }
+                        else {
+                            uploadData[0].data[index].push(value[1])
+                            console.log(uploadData[0].data[index])
+                        }
                     }
                 }) 
             }
         }
     })
-    uploadData[0].data[0].push('Country')
+    if(!uploadData[0].data[0].includes('Country'))
+    {
+        uploadData[0].data[0].push('Country')
+    }
     buffer = xlsx.build([{name: "updateSheet", data: uploadData[0].data}]);
-    wstream.write(buffer);
 }
